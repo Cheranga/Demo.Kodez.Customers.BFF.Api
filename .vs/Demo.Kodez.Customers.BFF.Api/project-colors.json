@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "84acb0f2-dceb-4332-83a2-360e4f7ae612": {
+      "ProjectGuid": "84acb0f2-dceb-4332-83a2-360e4f7ae612",
+      "DisplayName": "Demo.Kodez.Customers.BFF.Api",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

@@ -1,0 +1,16 @@
+
+.idea/.idea.Demo.Kodez.Customers.BFF.Api/.idea/
+
+*.v2
+
+Demo.Kodez.Customers.BFF.Api/bin/Debug/net5.0/ref/
+
+Demo.Kodez.Customers.BFF.Api/bin/Debug/net5.0/
+
+Demo.Kodez.Customers.BFF.Api/obj/Debug/net5.0/
+
+Demo.Kodez.Customers.BFF.Api/obj/
+
+.vs/Demo.Kodez.Customers.BFF.Api/v17/
+
+.vs/Demo.Kodez.Customers.BFF.Api/project-colors.json
