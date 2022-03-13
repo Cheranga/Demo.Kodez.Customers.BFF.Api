@@ -3,7 +3,6 @@ using Demo.Kodez.Customers.BFF.Api.Features.CreateCustomer.Models;
 using Demo.Kodez.Customers.BFF.Api.Features.CreateCustomer.Services;
 using Demo.Kodez.Customers.BFF.Api.Shared;
 using Demo.Kodez.Customers.BFF.Api.Shared.Services;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.Kodez.Customers.BFF.Api.Features.CreateCustomer
@@ -13,13 +12,14 @@ namespace Demo.Kodez.Customers.BFF.Api.Features.CreateCustomer
     {
         private readonly ICreateCustomerService _customerService;
         private readonly IResponseBuilder<CreateCustomerRequest, Result> _responseBuilder;
-        
-        public CreateCustomersController(ICreateCustomerService customerService, IResponseBuilder<CreateCustomerRequest, Result> responseBuilder)
+
+        public CreateCustomersController(ICreateCustomerService customerService,
+            IResponseBuilder<CreateCustomerRequest, Result> responseBuilder)
         {
             _customerService = customerService;
             _responseBuilder = responseBuilder;
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> PostAsync(CreateCustomerRequest request)
         {
@@ -29,6 +29,4 @@ namespace Demo.Kodez.Customers.BFF.Api.Features.CreateCustomer
             return response;
         }
     }
-
-    
 }

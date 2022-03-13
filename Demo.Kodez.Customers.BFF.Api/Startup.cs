@@ -21,6 +21,7 @@ using Demo.Kodez.Customers.BFF.Api.Features.UpdateCustomer.Services;
 using Demo.Kodez.Customers.BFF.Api.Shared;
 using Demo.Kodez.Customers.BFF.Api.Shared.Services;
 using FluentValidation;
+using Microsoft.Extensions.Options;
 using Microsoft.FeatureManagement;
 
 namespace Demo.Kodez.Customers.BFF.Api
@@ -39,7 +40,8 @@ namespace Demo.Kodez.Customers.BFF.Api
         {
 
             services.AddFeatureManagement();
-            
+
+            RegisterConfigurations(services, Configuration);
             RegisterServices(services);
             RegisterValidators(services);
             RegisterResponseBuilders(services);
@@ -56,6 +58,23 @@ namespace Demo.Kodez.Customers.BFF.Api
             });
         }
 
+        private void RegisterConfigurations(IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<CustomerIdentityServiceConfig>(configuration.GetSection(nameof(CustomerIdentityServiceConfig)));
+            services.Configure<CustomerProfileServiceConfig>(configuration.GetSection(nameof(CustomerProfileServiceConfig)));
+            
+            services.AddScoped(provider =>
+            {
+                var config = provider.GetRequiredService<IOptionsSnapshot<CustomerIdentityServiceConfig>>().Value;
+                return config;
+            });
+            services.AddScoped(provider =>
+            {
+                var config = provider.GetRequiredService<IOptionsSnapshot<CustomerProfileServiceConfig>>().Value;
+                return config;
+            });
+        }
+
         private void RegisterResponseBuilders(IServiceCollection services)
         {
             services.AddSingleton<IResponseBuilder<CreateCustomerRequest, Result>, CreateCustomerResponseBuilder>();
@@ -68,6 +87,8 @@ namespace Demo.Kodez.Customers.BFF.Api
             services.AddScoped<IUpdateCustomerService, UpdateCustomerService>();
             services.AddScoped<ICustomerIdentityService, CustomerIdentityService>();
             services.AddScoped<ICustomerProfileService, CustomerProfileService>();
+
+            services.AddHttpClient<ICustomerIdentityService, CustomerIdentityService>();
         }
 
         private void RegisterValidators(IServiceCollection services)
