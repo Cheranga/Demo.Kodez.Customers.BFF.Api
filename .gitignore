@@ -14,3 +14,5 @@ Demo.Kodez.Customers.BFF.Api/obj/
 .vs/Demo.Kodez.Customers.BFF.Api/v17/
 
 .vs/Demo.Kodez.Customers.BFF.Api/project-colors.json
+
+.vs/Demo.Kodez.Customers.BFF.Api/config/applicationhost.config
