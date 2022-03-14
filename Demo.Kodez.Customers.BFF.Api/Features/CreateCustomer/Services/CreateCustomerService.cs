@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Demo.Kodez.Customers.BFF.Api.Features.CreateCustomer.Models;
 using Demo.Kodez.Customers.BFF.Api.Shared;
 using Demo.Kodez.Customers.BFF.Api.Shared.Constants;
@@ -56,7 +57,10 @@ namespace Demo.Kodez.Customers.BFF.Api.Features.CreateCustomer.Services
         {
             var upsertRequest = new UpsertCustomerIdentityRequest
             {
-
+                CustomerId = Guid.NewGuid().ToString("N").ToUpper(),
+                Email = request.Email,
+                FirstName = request.FirstName,
+                LastName = request.LastName
             };
 
             return await _customerIdentityService.SaveAsync(upsertRequest);

@@ -11,7 +11,7 @@ namespace Demo.Kodez.Customers.BFF.Api.Features.CreateCustomer.Validators
             RuleFor(x => x.FirstName).NotNull().NotEmpty();
             RuleFor(x=>x.LastName).NotNull().NotEmpty();
             RuleFor(x => x.Email).NotNull().NotEmpty().EmailAddress();
-            RuleFor(x => x.Address).SetValidator(new CreateAddressValidator());
+            RuleFor(x => x.Address).SetValidator(new CreateAddressValidator()).When(x=>x.Address != null);
         }
     }
 }

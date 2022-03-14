@@ -21,7 +21,7 @@ namespace Demo.Kodez.Customers.BFF.Api.Features.CreateCustomer
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync(CreateCustomerRequest request)
+        public async Task<IActionResult> PostAsync([FromBody]CreateCustomerRequest request)
         {
             var operation = await _customerService.CreateAsync(request);
             var response = _responseBuilder.GetResponse(request, operation);
