@@ -1,6 +1,5 @@
 ﻿using System;
 using Azure.Identity;
-using Demo.Kodez.Customers.BFF.Api.Shared.Constants;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Extensions.Hosting;
@@ -15,13 +14,13 @@ namespace Demo.Kodez.Customers.BFF.Api.Extensions
 
             webHostBuilder.AddAzureAppConfiguration(options =>
             {
-                var sharedAzureAppConfigurationUrl = configuration[ConfigurationOptions.AzureAppConfigurationUrl];
+                var sharedAzureAppConfigurationUrl = configuration["AzureAppConfigurationUrl"];
 
                 options.Connect(new Uri(sharedAzureAppConfigurationUrl), credentials)
                     .Select(KeyFilter.Any)
-                    .Select($"{ConfigurationOptions.AppPrefix}:*", context.HostingEnvironment.EnvironmentName)
+                    .Select("BFF:*", context.HostingEnvironment.EnvironmentName)
                     .ConfigureKeyVault(vaultOptions => { vaultOptions.SetCredential(credentials); })
-                    .ConfigureRefresh(refreshOptions => { refreshOptions.Register(ConfigurationOptions.SentinelKey, true).SetCacheExpiration(TimeSpan.FromSeconds(5)); })
+                    .ConfigureRefresh(refreshOptions => { refreshOptions.Register("RefreshAll", true).SetCacheExpiration(TimeSpan.FromSeconds(5)); })
                     .UseFeatureFlags(flagOptions => { flagOptions.CacheExpirationInterval = TimeSpan.FromSeconds(5); });
             });
         }

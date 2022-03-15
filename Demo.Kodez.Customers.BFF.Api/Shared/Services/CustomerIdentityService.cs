@@ -13,11 +13,11 @@ namespace Demo.Kodez.Customers.BFF.Api.Shared.Services
         Task<Result> InsertAsync(UpsertCustomerIdentityRequest request);
         Task<Result> UpdateAsync(UpsertCustomerIdentityRequest request);
     }
-    
+
     public class CustomerIdentityService : ICustomerIdentityService
     {
-        private readonly HttpClient _httpClient;
         private readonly CustomerIdentityServiceConfig _config;
+        private readonly HttpClient _httpClient;
         private readonly ILogger<CustomerIdentityService> _logger;
 
         public CustomerIdentityService(HttpClient httpClient, CustomerIdentityServiceConfig config, ILogger<CustomerIdentityService> logger)
@@ -31,18 +31,18 @@ namespace Demo.Kodez.Customers.BFF.Api.Shared.Services
         {
             var url = $"{_config.BaseUrl}/customers";
             var operation = await ExecuteAsync(request, url, HttpMethod.Post);
-            
+
             return operation;
         }
-        
+
         public async Task<Result> UpdateAsync(UpsertCustomerIdentityRequest request)
         {
             var url = $"{_config.BaseUrl}/customers/{request.CustomerId}";
             var operation = await ExecuteAsync(request, url, HttpMethod.Put);
-            
+
             return operation;
         }
-        
+
         private async Task<Result> ExecuteAsync(UpsertCustomerIdentityRequest request, string url, HttpMethod method)
         {
             try
@@ -55,7 +55,7 @@ namespace Demo.Kodez.Customers.BFF.Api.Shared.Services
                 };
 
                 var httpResponse = await _httpClient.SendAsync(httpRequest);
-                
+
                 if (!httpResponse.IsSuccessStatusCode)
                 {
                     return Result.Failure(ErrorCodes.CannotUpsertCustomer, httpResponse.ReasonPhrase);
