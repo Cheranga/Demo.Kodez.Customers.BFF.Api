@@ -10,7 +10,8 @@ namespace Demo.Kodez.Customers.BFF.Api.Shared.Services
 {
     public interface ICustomerIdentityService
     {
-        Task<Result> SaveAsync(UpsertCustomerIdentityRequest request);
+        Task<Result> InsertAsync(UpsertCustomerIdentityRequest request);
+        Task<Result> UpdateAsync(UpsertCustomerIdentityRequest request);
     }
     
     public class CustomerIdentityService : ICustomerIdentityService
@@ -25,16 +26,30 @@ namespace Demo.Kodez.Customers.BFF.Api.Shared.Services
             _config = config;
             _logger = logger;
         }
-        
-        public async Task<Result> SaveAsync(UpsertCustomerIdentityRequest request)
+
+        public async Task<Result> InsertAsync(UpsertCustomerIdentityRequest request)
         {
+            var url = $"{_config.BaseUrl}/customers";
+            var operation = await ExecuteAsync(request, url, HttpMethod.Post);
             
+            return operation;
+        }
+        
+        public async Task<Result> UpdateAsync(UpsertCustomerIdentityRequest request)
+        {
+            var url = $"{_config.BaseUrl}/customers/{request.CustomerId}";
+            var operation = await ExecuteAsync(request, url, HttpMethod.Put);
+            
+            return operation;
+        }
+        
+        private async Task<Result> ExecuteAsync(UpsertCustomerIdentityRequest request, string url, HttpMethod method)
+        {
             try
             {
-                var url = $"{_config.BaseUrl}/api/customers";
                 var serializedData = JsonConvert.SerializeObject(request);
 
-                var httpRequest = new HttpRequestMessage(HttpMethod.Post, url)
+                var httpRequest = new HttpRequestMessage(method, url)
                 {
                     Content = new StringContent(serializedData, Encoding.UTF8, "application/json")
                 };

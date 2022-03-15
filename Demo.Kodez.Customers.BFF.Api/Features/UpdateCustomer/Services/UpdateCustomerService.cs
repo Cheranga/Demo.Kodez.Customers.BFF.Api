@@ -2,6 +2,7 @@
 using Demo.Kodez.Customers.BFF.Api.Features.UpdateCustomer.Models;
 using Demo.Kodez.Customers.BFF.Api.Shared;
 using Demo.Kodez.Customers.BFF.Api.Shared.Constants;
+using Demo.Kodez.Customers.BFF.Api.Shared.Services;
 using FluentValidation;
 using Microsoft.FeatureManagement;
 
@@ -14,13 +15,13 @@ namespace Demo.Kodez.Customers.BFF.Api.Features.UpdateCustomer.Services
     
     public class UpdateCustomerService : IUpdateCustomerService
     {
-        private readonly IFeatureManager _featureManager;
         private readonly IValidator<UpdateCustomerRequest> _validator;
+        private readonly ICustomerIdentityService _customerIdentityService;
 
-        public UpdateCustomerService(IFeatureManager featureManager, IValidator<UpdateCustomerRequest> validator)
+        public UpdateCustomerService(IValidator<UpdateCustomerRequest> validator, ICustomerIdentityService customerIdentityService)
         {
-            _featureManager = featureManager;
             _validator = validator;
+            _customerIdentityService = customerIdentityService;
         }
         
         public async Task<Result> UpdateAsync(UpdateCustomerRequest request)
@@ -30,11 +31,17 @@ namespace Demo.Kodez.Customers.BFF.Api.Features.UpdateCustomer.Services
             {
                 return Result.Failure(ErrorCodes.InvalidRequest, validationResult);
             }
-            
-            var canUpdateEmail = await _featureManager.IsEnabledAsync(Shared.Constants.Features.UpdateEmail);
 
-            return Result.Success();
+            var updateRequest = new UpsertCustomerIdentityRequest
+            {
+                CustomerId = request.CustomerId,
+                Email = request.Email,
+                FirstName = request.FirstName,
+                LastName = request.LastName
+            };
+            var operation = await _customerIdentityService.UpdateAsync(updateRequest);
 
+            return operation;
         }
     }
 }

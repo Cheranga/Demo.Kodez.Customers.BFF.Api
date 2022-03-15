@@ -45,17 +45,11 @@ namespace Demo.Kodez.Customers.BFF.Api
 
         private void RegisterConfigurations(IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<CustomerIdentityServiceConfig>(configuration.GetSection($"{ConfigurationOptions.AppPrefix}:CustomersBFF:IdentityApiConfig"));
-            services.Configure<CustomerProfileServiceConfig>(configuration.GetSection("CustomersBFF:ProfileApiConfig"));
+            services.Configure<CustomerIdentityServiceConfig>(configuration.GetSection("CustomersBFF:IdentityApiConfig"));
 
             services.AddScoped(provider =>
             {
                 var config = provider.GetRequiredService<IOptionsSnapshot<CustomerIdentityServiceConfig>>().Value;
-                return config;
-            });
-            services.AddScoped(provider =>
-            {
-                var config = provider.GetRequiredService<IOptionsSnapshot<CustomerProfileServiceConfig>>().Value;
                 return config;
             });
         }
@@ -71,7 +65,6 @@ namespace Demo.Kodez.Customers.BFF.Api
             services.AddScoped<ICreateCustomerService, CreateCustomerService>();
             services.AddScoped<IUpdateCustomerService, UpdateCustomerService>();
             services.AddScoped<ICustomerIdentityService, CustomerIdentityService>();
-            services.AddScoped<ICustomerProfileService, CustomerProfileService>();
 
             services.AddHttpClient<ICustomerIdentityService, CustomerIdentityService>();
         }

@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Net;
 using Demo.Kodez.Customers.BFF.Api.Features.UpdateCustomer.Models;
 using Demo.Kodez.Customers.BFF.Api.Shared;
@@ -9,17 +10,32 @@ namespace Demo.Kodez.Customers.BFF.Api.Features.UpdateCustomer.Services
 {
     public class UpdateCustomerResponseBuilder : IResponseBuilder<UpdateCustomerRequest, Result>
     {
-        public IActionResult GetResponse(UpdateCustomerRequest request, Result response)
+        public IActionResult GetResponse(UpdateCustomerRequest request, Result operation)
         {
-            if (response.Status)
+            if (operation.Status)
             {
                 return new OkResult();
             }
-
-            return response.ErrorCode switch
+        
+            return GetErrorResponse(operation);
+        }
+        
+        private IActionResult GetErrorResponse(Result operation)
+        {
+            var errorResponse = new
             {
-                ErrorCodes.InvalidRequest => new BadRequestObjectResult(response.ValidationResult),
-                _ => new ObjectResult(response.ValidationResult) {StatusCode = (int) (HttpStatusCode.InternalServerError)}
+                operation.ErrorCode,
+                Errors = operation.ValidationResult.Errors.Select(x =>
+                    new
+                    {
+                        x.PropertyName,
+                        x.ErrorMessage
+                    })
+            };
+            return operation.ErrorCode switch
+            {
+                ErrorCodes.InvalidRequest => new BadRequestObjectResult(errorResponse),
+                _ => new BadRequestObjectResult(errorResponse)
             };
         }
     }
