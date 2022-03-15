@@ -14,9 +14,13 @@ namespace Demo.Kodez.Customers.BFF.Api
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
+                .ConfigureAppConfiguration((context, builder) =>
                 {
-                    webBuilder.RegisterAzureAppConfigurationProviders();
+                    var configuration = builder.Build();
+                    builder.RegisterAzureAppConfigurationProviders(context, configuration);
+                })
+                .ConfigureWebHostDefaults( webBuilder =>
+                {
                     webBuilder.UseStartup<Startup>();
                 });
         }

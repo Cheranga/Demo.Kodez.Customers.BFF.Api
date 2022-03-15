@@ -4,6 +4,7 @@ using Demo.Kodez.Customers.BFF.Api.Features.CreateCustomer.Services;
 using Demo.Kodez.Customers.BFF.Api.Features.UpdateCustomer.Models;
 using Demo.Kodez.Customers.BFF.Api.Features.UpdateCustomer.Services;
 using Demo.Kodez.Customers.BFF.Api.Shared;
+using Demo.Kodez.Customers.BFF.Api.Shared.Constants;
 using Demo.Kodez.Customers.BFF.Api.Shared.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
@@ -29,8 +30,6 @@ namespace Demo.Kodez.Customers.BFF.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddFeatureManagement();
-
             services.AddAzureAppConfiguration()
                 .AddFeatureManagement();
 
@@ -40,20 +39,13 @@ namespace Demo.Kodez.Customers.BFF.Api
             RegisterResponseBuilders(services);
 
 
-            services.AddControllers().AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-            });
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo {Title = "Demo.Kodez.Customers.BFF.Api", Version = "v1"});
-            });
+            services.AddControllers().AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
+            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "Demo.Kodez.Customers.BFF.Api", Version = "v1"}); });
         }
 
         private void RegisterConfigurations(IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<CustomerIdentityServiceConfig>(
-                configuration.GetSection("CustomersBFF:IdentityApiConfig"));
+            services.Configure<CustomerIdentityServiceConfig>(configuration.GetSection($"{ConfigurationOptions.AppPrefix}:CustomersBFF:IdentityApiConfig"));
             services.Configure<CustomerProfileServiceConfig>(configuration.GetSection("CustomersBFF:ProfileApiConfig"));
 
             services.AddScoped(provider =>
@@ -96,10 +88,7 @@ namespace Demo.Kodez.Customers.BFF.Api
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Demo.Kodez.Customers.BFF.Api v1");
-                });
+                app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Demo.Kodez.Customers.BFF.Api v1"); });
             }
 
             app.UseAzureAppConfiguration();
