@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Net;
 using Demo.Kodez.Customers.BFF.Api.Features.CreateCustomer.Models;
 using Demo.Kodez.Customers.BFF.Api.Shared;
 using Demo.Kodez.Customers.BFF.Api.Shared.Constants;
@@ -34,7 +35,10 @@ namespace Demo.Kodez.Customers.BFF.Api.Features.CreateCustomer.Services
             return operation.ErrorCode switch
             {
                 ErrorCodes.InvalidRequest => new BadRequestObjectResult(errorResponse),
-                _ => new BadRequestObjectResult(errorResponse)
+                _ => new ObjectResult(errorResponse)
+                {
+                    StatusCode = (int) HttpStatusCode.InternalServerError
+                }
             };
         }
     }

@@ -16,10 +16,10 @@ namespace Demo.Kodez.Customers.BFF.Api.Features.UpdateCustomer.Services
             {
                 return new OkResult();
             }
-        
+
             return GetErrorResponse(operation);
         }
-        
+
         private IActionResult GetErrorResponse(Result operation)
         {
             var errorResponse = new
@@ -35,7 +35,10 @@ namespace Demo.Kodez.Customers.BFF.Api.Features.UpdateCustomer.Services
             return operation.ErrorCode switch
             {
                 ErrorCodes.InvalidRequest => new BadRequestObjectResult(errorResponse),
-                _ => new BadRequestObjectResult(errorResponse)
+                _ => new ObjectResult(errorResponse)
+                {
+                    StatusCode = (int) (HttpStatusCode.InternalServerError)
+                }
             };
         }
     }
