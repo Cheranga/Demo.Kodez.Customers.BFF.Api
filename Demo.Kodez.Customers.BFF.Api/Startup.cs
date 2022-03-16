@@ -30,8 +30,7 @@ namespace Demo.Kodez.Customers.BFF.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAzureAppConfiguration()
-                .AddFeatureManagement();
+            services.AddFeatureManagement();
 
             RegisterConfigurations(services, Configuration);
             RegisterServices(services);
@@ -83,8 +82,6 @@ namespace Demo.Kodez.Customers.BFF.Api
                 app.UseSwagger();
                 app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Demo.Kodez.Customers.BFF.Api v1"); });
             }
-
-            app.UseAzureAppConfiguration();
 
             app.UseHttpsRedirection();
 
