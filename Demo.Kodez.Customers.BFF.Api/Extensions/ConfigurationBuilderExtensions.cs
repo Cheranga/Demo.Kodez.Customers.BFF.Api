@@ -14,7 +14,6 @@ namespace Demo.Kodez.Customers.BFF.Api.Extensions
         //         options.Connect(new Uri(sharedAzureAppConfigurationUrl), credentials)
         //             .Select(KeyFilter.Any)
         //             .Select("CustomersBFF:*", context.HostingEnvironment.EnvironmentName)
-        //             .ConfigureKeyVault(vaultOptions => { vaultOptions.SetCredential(credentials); })
         //             .ConfigureRefresh(refreshOptions => { refreshOptions.Register("RefreshAll", true).SetCacheExpiration(TimeSpan.FromSeconds(5)); })
         //             .UseFeatureFlags(flagOptions => { flagOptions.CacheExpirationInterval = TimeSpan.FromSeconds(5); });
         //     });
